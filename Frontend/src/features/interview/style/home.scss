@@ -1,23 +1,10 @@
-// ── Variables ────────────────────────────────────────────────────────────────
-$bg-page:        #0d1117;
-$bg-card:        #161b22;
-$bg-panel:       #1c2230;
-$bg-input:       #1e2535;
-$border-color:   #2a3348;
-$text-primary:   #e6edf3;
-$text-muted:     #7d8590;
-$accent:         #ff2d78;
-$accent-alt:     #ff6b9d;
-$badge-required: #ff2d78;
-$badge-best:     #ff2d78;
-$info-bg:        #1b2a4a;
-$info-border:    #2d4a7a;
-$font-stack:     system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+@use "./variables" as *;
 
 // ── Page Shell ───────────────────────────────────────────────────────────────
 .home-page {
     width: 100%;
-    min-height: 100vh;
+    min-height: calc(100vh - 4rem);
+    min-height: calc(100dvh - 4rem);
     background-color: $bg-page;
     color: $text-primary;
     font-family: $font-stack;
@@ -343,12 +330,18 @@ $font-stack:     system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Robot
             gap: 0.5rem;
             cursor: pointer;
             flex-shrink: 0;
+            min-width: 0;
 
             .match-score {
                 font-size: 0.8rem;
                 font-weight: 600;
                 color: $accent;
                 align-items: flex-start;
+            }
+
+            h3,
+            p {
+                overflow-wrap: anywhere;
             }
         }
     }
@@ -368,6 +361,150 @@ $font-stack:     system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Robot
 
         &:hover {
             color: $text-primary;
+        }
+    }
+
+    @media (max-width: 768px) {
+        .home-page {
+            min-height: calc(100vh - 4rem);
+            min-height: calc(100dvh - 4rem);
+            justify-content: flex-start;
+            gap: 1.5rem;
+            padding: 2rem 1rem;
+        }
+
+        .page-header {
+            h1 {
+                font-size: clamp(1.6rem, 5vw, 2rem);
+                line-height: 1.2;
+            }
+
+            p {
+                font-size: 0.9rem;
+            }
+        }
+
+        .interview-card {
+            &__body {
+                flex-direction: column;
+                min-height: 0;
+            }
+
+            &__footer {
+                align-items: stretch;
+                flex-direction: column;
+                gap: 0.75rem;
+                padding: 1rem;
+
+                .footer-info {
+                    line-height: 1.5;
+                }
+            }
+        }
+
+        .panel {
+            min-width: 0;
+            padding: 1.25rem;
+
+            &__textarea {
+                min-height: 12rem;
+            }
+
+            &__textarea--short {
+                min-height: 6rem;
+            }
+        }
+
+        .panel-divider {
+            width: auto;
+            height: 1px;
+        }
+
+        .generate-btn {
+            justify-content: center;
+            width: 100%;
+            min-height: 2.9rem;
+            padding: 0.75rem 1rem;
+            text-align: center;
+        }
+
+        .recent-reports {
+            .reports-list {
+                flex-direction: column;
+
+                .report-item {
+                    width: 100%;
+                    min-width: 0;
+                }
+            }
+        }
+
+        .page-footer {
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 0.75rem 1.25rem;
+            text-align: center;
+        }
+    }
+
+    @media (max-width: 480px) {
+        .home-page {
+            gap: 1.25rem;
+            padding: 1.5rem 0.75rem;
+        }
+
+        .page-header {
+            h1 {
+                font-size: 1.55rem;
+            }
+        }
+
+        .interview-card {
+            border-radius: 0.75rem;
+        }
+
+        .panel {
+            gap: 0.8rem;
+            padding: 1rem;
+
+            &__header {
+                flex-wrap: wrap;
+                gap: 0.4rem;
+
+                h2 {
+                    min-width: 0;
+                    font-size: 0.95rem;
+                }
+            }
+
+            &__textarea {
+                min-height: 10rem;
+                padding: 0.75rem;
+                font-size: 1rem;
+            }
+
+            &__textarea--short {
+                min-height: 6rem;
+            }
+        }
+
+        .dropzone {
+            width: 100%;
+            min-height: 9rem;
+            padding: 1.25rem 0.75rem;
+            text-align: center;
+        }
+
+        .info-box {
+            padding: 0.7rem;
+        }
+
+        .recent-reports {
+            .reports-list {
+                .report-item {
+                    padding: 0.85rem;
+                }
+            }
         }
     }
 }

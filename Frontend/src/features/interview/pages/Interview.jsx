@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react'
 import '../style/interview.scss'
+import '../style/chat.scss'
 import { useInterview } from '../hooks/useInterview.js'
 import { useNavigate, useParams } from 'react-router'
 
@@ -61,6 +62,7 @@ const Interview = () => {
     const [ activeNav, setActiveNav ] = useState('technical')
     const { report, getReportById, loading, getResumePdf } = useInterview()
     const { interviewId } = useParams()
+    const navigate = useNavigate()
 
     useEffect(() => {
         if (interviewId) {
@@ -155,6 +157,13 @@ const Interview = () => {
                             </div>
                         </section>
                     )}
+                    <button
+                        className='button primary-button interview-chat-button'
+                        onClick={() => navigate(`/chat?reportId=${interviewId}`)}
+                        type='button'
+                    >
+                        Ask AI about this report
+                    </button>
                 </main>
 
                 <div className='interview-divider' />
