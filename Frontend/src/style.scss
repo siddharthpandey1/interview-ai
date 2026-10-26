@@ -1,4 +1,5 @@
 @use "./style/button.scss";
+@use "./features/interview/style/variables" as *;
 
 * {
     margin: 0%;
@@ -19,4 +20,16 @@ body,
 
 .highlight{
     color: #d20d3b;
+}
+
+.ai-limit-notice {
+    width: min(100%, 56rem);
+    margin: 0 auto;
+    padding: 0.8rem 1rem;
+    color: $text-primary;
+    background-color: $bg-panel;
+    border: 1px solid $border-color;
+    border-radius: 0.6rem;
+    font-size: 0.875rem;
+    line-height: 1.5;
 }

@@ -24,7 +24,9 @@ export const useChat = () => {
         chatSending,
         setChatSending,
         chatError,
-        setChatError
+        setChatError,
+        chatNotice,
+        setChatNotice
     } = context
     const [searchParams, setSearchParams] = useSearchParams()
     const activeChatId = searchParams.get("chatId")
@@ -100,11 +102,13 @@ export const useChat = () => {
 
     const selectChat = (chatId) => {
         setChatError("")
+        setChatNotice("")
         setSearchParams({ chatId })
     }
 
     const startNewChat = () => {
         setChatError("")
+        setChatNotice("")
         setSearchParams({})
         setChatMessages([])
     }
@@ -116,6 +120,7 @@ export const useChat = () => {
 
         setChatSending(true)
         setChatError("")
+        setChatNotice("")
 
         try {
             const response = await sendChatMessageRequest({
@@ -138,7 +143,12 @@ export const useChat = () => {
 
             return true
         } catch (error) {
-            setChatError(getErrorMessage(error, "Unable to send your message."))
+            if (error.response?.status === 429) {
+                setChatNotice(error.response?.data?.message || "AI ki daily limit khatam ho gayi hai. Thodi der baad dobara try karein.")
+                setChatError("")
+            } else {
+                setChatError(getErrorMessage(error, "Unable to send your message."))
+            }
             return false
         } finally {
             setChatSending(false)
@@ -168,6 +178,7 @@ export const useChat = () => {
         listLoading: chatListLoading,
         sending: chatSending,
         error: chatError,
+        notice: chatNotice,
         selectChat,
         startNewChat,
         sendMessage,

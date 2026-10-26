@@ -13,11 +13,22 @@ async function generateInterViewReportController(req, res) {
     const resumeContent = await (new pdfParse.PDFParse(Uint8Array.from(req.file.buffer))).getText()
     const { selfDescription, jobDescription } = req.body
 
-    const interViewReportByAi = await generateInterviewReport({
-        resume: resumeContent.text,
-        selfDescription,
-        jobDescription
-    })
+    let interViewReportByAi
+    try {
+        interViewReportByAi = await generateInterviewReport({
+            resume: resumeContent.text,
+            selfDescription,
+            jobDescription
+        })
+    } catch (error) {
+        console.error("Interview report AI generation failed:", error)
+        if (error.status === 429) {
+            return res.status(429).json({
+                message: "AI ki daily limit khatam ho gayi hai. Thodi der baad dobara try karein."
+            })
+        }
+        throw error
+    }
 
     const interviewReport = await interviewReportModel.create({
         user: req.user.id,

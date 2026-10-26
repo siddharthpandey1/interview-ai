@@ -40,6 +40,12 @@ Interview AI helps candidates prepare for job interviews with AI-generated repor
    | `MONGODB_URI` | MongoDB connection URI |
    | `JWT_SECRET` | Secret used to sign and verify authentication tokens |
    | `GOOGLE_GENAI_API_KEY` | Google Gemini API key |
+   | `GEMINI_MODELS` | Optional comma-separated Gemini models to try for chat and interview reports, in priority order (defaults to `gemini-3-flash-preview`) |
+   | `CLIENT_URL` | Frontend origin allowed by CORS (local default: `http://localhost:5173`) |
+   | `PORT` | Backend listening port (local default: `3000`) |
+   | `NODE_ENV` | Set to `production` for production cookie settings |
+
+   You can copy `Backend/.env.example` to `Backend/.env` and fill in the required values.
 
 3. Start the backend:
 
@@ -58,7 +64,9 @@ Interview AI helps candidates prepare for job interviews with AI-generated repor
    npm install
    ```
 
-2. Start the Vite development server:
+2. (Optional for local development) Copy `Frontend/.env.example` to `Frontend/.env`. Set `VITE_API_URL` to the backend base URL; if omitted, the app uses `http://localhost:3000`.
+
+3. Start the Vite development server:
 
    ```bash
    npm run dev
@@ -66,11 +74,13 @@ Interview AI helps candidates prepare for job interviews with AI-generated repor
 
    Vite uses port **5173** by default.
 
-3. To create a production build:
+4. To create a production build:
 
    ```bash
    npm run build
    ```
+
+   For Vercel, set `VITE_API_URL` to the deployed Render backend base URL. On Render, set `CLIENT_URL` to the deployed Vercel origin, set `NODE_ENV` to `production`, and configure `PORT` only if needed (Render supplies it automatically).
 
 ## Origin
 

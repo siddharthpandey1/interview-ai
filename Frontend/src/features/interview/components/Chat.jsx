@@ -15,6 +15,7 @@ const Chat = ({
     listLoading,
     sending,
     error,
+    notice,
     selectChat,
     startNewChat,
     sendMessage,
@@ -181,6 +182,7 @@ const Chat = ({
                 </div>
 
                 <div className="chat-composer-wrap">
+                    {notice && <p className="ai-limit-notice" role="status">{notice}</p>}
                     {error && <p className="chat-composer__error" role="alert">{error}</p>}
                     <form className="chat-composer" onSubmit={handleSubmit}>
                         <textarea

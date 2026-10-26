@@ -5,7 +5,7 @@ import { useNavigate } from 'react-router'
 
 const Home = () => {
 
-    const { loading, generateReport,reports } = useInterview()
+    const { loading, generateReport, reports, reportNotice } = useInterview()
     const [ jobDescription, setJobDescription ] = useState("")
     const [ selfDescription, setSelfDescription ] = useState("")
     const resumeInputRef = useRef()
@@ -15,7 +15,9 @@ const Home = () => {
     const handleGenerateReport = async () => {
         const resumeFile = resumeInputRef.current.files[ 0 ]
         const data = await generateReport({ jobDescription, selfDescription, resumeFile })
-        navigate(`/interview/${data._id}`)
+        if (data) {
+            navigate(`/interview/${data._id}`)
+        }
     }
 
     if (loading) {
@@ -121,6 +123,8 @@ const Home = () => {
                     </button>
                 </div>
             </div>
+
+            {reportNotice && <p className="ai-limit-notice" role="status">{reportNotice}</p>}
 
             {/* Recent Reports List */}
             {reports.length > 0 && (

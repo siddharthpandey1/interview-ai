@@ -13,21 +13,25 @@ export const useInterview = () => {
         throw new Error("useInterview must be used within an InterviewProvider")
     }
 
-    const { loading, setLoading, report, setReport, reports, setReports } = context
+    const { loading, setLoading, report, setReport, reports, setReports, reportNotice, setReportNotice } = context
 
     const generateReport = async ({ jobDescription, selfDescription, resumeFile }) => {
         setLoading(true)
+        setReportNotice("")
         let response = null
         try {
             response = await generateInterviewReport({ jobDescription, selfDescription, resumeFile })
             setReport(response.interviewReport)
         } catch (error) {
-            console.log(error)
+            console.error("Interview report generation failed:", error)
+            if (error.response?.status === 429) {
+                setReportNotice(error.response?.data?.message || "AI ki daily limit khatam ho gayi hai. Thodi der baad dobara try karein.")
+            }
         } finally {
             setLoading(false)
         }
 
-        return response.interviewReport
+        return response?.interviewReport || null
     }
 
     const getReportById = async (interviewId) => {
@@ -86,6 +90,6 @@ export const useInterview = () => {
         }
     }, [ interviewId ])
 
-    return { loading, report, reports, generateReport, getReportById, getReports, getResumePdf }
+    return { loading, report, reports, reportNotice, generateReport, getReportById, getReports, getResumePdf }
 
 }

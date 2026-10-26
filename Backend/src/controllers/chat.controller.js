@@ -189,11 +189,22 @@ async function sendChatMessageController(req, res) {
     chat.messages.push({ role: "user", content: message })
     await chat.save()
 
-    const reply = await generateChatResponse({
-        message,
-        history,
-        context: createReportContext(linkedReport)
-    })
+    let reply
+    try {
+        reply = await generateChatResponse({
+            message,
+            history,
+            context: createReportContext(linkedReport)
+        })
+    } catch (error) {
+        console.error("Chat AI response generation failed:", error)
+        if (error.status === 429) {
+            return res.status(429).json({
+                message: "AI ki daily limit khatam ho gayi hai. Thodi der baad dobara try karein."
+            })
+        }
+        throw error
+    }
 
     chat.messages.push({ role: "assistant", content: reply })
     await chat.save()
