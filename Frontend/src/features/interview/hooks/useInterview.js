@@ -24,9 +24,7 @@ export const useInterview = () => {
             setReport(response.interviewReport)
         } catch (error) {
             console.error("Interview report generation failed:", error)
-            if (error.response?.status === 429) {
-                setReportNotice(error.response?.data?.message || "AI ki daily limit khatam ho gayi hai. Thodi der baad dobara try karein.")
-            }
+            setReportNotice(error.response?.data?.message || error.message || "Unable to generate the interview report.")
         } finally {
             setLoading(false)
         }

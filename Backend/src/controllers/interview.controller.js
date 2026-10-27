@@ -1,4 +1,5 @@
 const pdfParse = require("pdf-parse")
+const mongoose = require("mongoose")
 const { generateInterviewReport, generateResumePdf } = require("../services/ai.service")
 const interviewReportModel = require("../models/interviewReport.model")
 
@@ -9,6 +10,18 @@ const interviewReportModel = require("../models/interviewReport.model")
  * @description Controller to generate interview report based on user self description, resume and job description.
  */
 async function generateInterViewReportController(req, res) {
+
+    if (!req.file) {
+        return res.status(400).json({
+            message: "Resume PDF is required."
+        })
+    }
+
+    if (req.file.mimetype !== "application/pdf" || req.file.buffer.subarray(0, 5).toString() !== "%PDF-") {
+        return res.status(400).json({
+            message: "Please upload a valid PDF file."
+        })
+    }
 
     const resumeContent = await (new pdfParse.PDFParse(Uint8Array.from(req.file.buffer))).getText()
     const { selfDescription, jobDescription } = req.body
@@ -86,7 +99,16 @@ async function getAllInterviewReportsController(req, res) {
 async function generateResumePdfController(req, res) {
     const { interviewReportId } = req.params
 
-    const interviewReport = await interviewReportModel.findById(interviewReportId)
+    if (!mongoose.Types.ObjectId.isValid(interviewReportId)) {
+        return res.status(404).json({
+            message: "Interview report not found."
+        })
+    }
+
+    const interviewReport = await interviewReportModel.findOne({
+        _id: interviewReportId,
+        user: req.user.id
+    })
 
     if (!interviewReport) {
         return res.status(404).json({

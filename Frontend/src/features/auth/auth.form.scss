@@ -1,3 +1,5 @@
+@use "../interview/style/variables" as *;
+
 main:has(> .form-container) {
     min-height: calc(100vh - 4rem);
     min-height: calc(100dvh - 4rem);
@@ -21,6 +23,16 @@ main:has(> .form-container) {
         h1 {
             font-size: clamp(1.5rem, 6vw, 2rem);
         }
+    }
+
+    .form-error {
+        padding: 0.75rem 1rem;
+        color: $text-primary;
+        background-color: $bg-panel;
+        border: 1px solid $border-color;
+        border-radius: 0.6rem;
+        font-size: 0.9rem;
+        line-height: 1.5;
     }
 
     form{
